@@ -1,0 +1,281 @@
+  return (
+    <div className="pie_chart_main_div">
+      <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
+        {props.dials_without_data_show === "yes" ? (
+          <div className="dials_without_data_div1">
+            <div className="dials_without_data_div2">
+              <div className="dials_without_data_div2_1">
+                <img src={dials_without_data} alt="SIP" />
+              </div>
+            </div>
+            <div className="dials_without_data_label1">Nothing here yet! </div>
+            <div className="dials_without_data_label2">
+              {props.dials_without_data_show_msg}
+            </div>
+          </div>
+        ) : (
+          <>
+            {props.page === "product-assessment" ? (
+              <div className="pie_chart_main_div_view_result">
+                <button
+                  style={{
+                    cursor: "pointer",
+                    border: "none",
+                    backgroundColor: "transparent",
+                  }}
+                  onClick={() =>
+                    navigate(
+                      `/view-all-results/${param.type}/${param.productId}/${param.assessmentId}`
+                    )
+                  }
+                >
+                  View All Results
+                </button>
+              </div>
+            ) : (
+              <div className="result_back_to_assessment">
+                <div style={{ display: "flex", alignItems: "center" }}>
+                  <button
+                    style={{
+                      cursor: "pointer",
+                      display: "flex",
+                      alignItems: "center",
+                      background: "none",
+                      border: "none",
+                    }}
+                    onClick={() =>
+                      navigate(
+                        `/product-assessment/${param.type}/${param.productId}/${param.assessmentId}`
+                      )
+                    }
+                  >
+                    <img
+                      src={result_arrow_full_small_left}
+                      alt="Back Arrow"
+                      style={{ marginRight: "8px", marginLeft: "-14px" }}
+                    />Back to Assessment
+                  </button>
+                </div>
+              </div>
+            )}
+
+            <div style={{ width: "100%", display: "flex" }}>
+              {dialStatus === "great_job" ? (
+                <div
+                  className="pie_chart_great_jon_div"
+                  style={{ width: "195px" }}
+                >
+                  <div>
+                    <img src={great_job} alt="SIP"></img>
+                  </div>
+                  <div className="pie_chart_lock_out_label1">Great Job!</div>
+                  <div className="pie_chart_lock_out_label2">
+                    This product meets Kenvue's sustainable product innovation
+                    commitment.
+                  </div>
+                </div>
+              ) : (
+                <div
+                  className="pie_chart_lock_out_div"
+                  style={{ width: "195px" }}
+                >
+                  <div>
+                    <img src={lock_out_warning} alt="SIP"></img>
+                  </div>
+                  <div className="pie_chart_lock_out_label1">Look out!</div>
+                  <div className="pie_chart_lock_out_label2">
+                    This product does not meet Kenvue's sustainable product
+                    innovation commitment. Can you identify the driver(s) and
+                    consider how we might improve the product's sustainability?
+                  </div>
+                </div>
+              )}
+              <div style={{ width: "82%", display: "flex" }}>
+                {productEnvironmentalFootprintSeries1 !== undefined && (
+                  <PieChartDials
+                    chartDivIndex="1"
+                    title="Product Environmental Footprint"
+                    sub_title={
+                      productEnvironmentalFootprintData.dials
+                        .pie_chart_sub_title
+                    }
+                    pie_chart_percentage={
+                      productEnvironmentalFootprintData.dials
+                        .pie_chart_percentage
+                    }
+                    data_series0={ProductEnvironmentalFootprint_series0}
+                    data_series1={productEnvironmentalFootprintSeries1}
+                    flipcard_description={
+                      ProductEnvironmentalFootprintFlipcardDescription
+                    }
+                    selectedpiechart={
+                      props.selectedtab === 1 ? "selected" : undefined
+                    }
+                  />
+                )}
+
+                {carbonFootprintSeries1 !== undefined && (
+                  <PieChartDials
+                    chartDivIndex="2"
+                    title="Carbon Footprint"
+                    sub_title={carbonFootprintData.dials.pie_chart_sub_title}
+                    pie_chart_percentage={
+                      carbonFootprintData.dials.pie_chart_percentage
+                    }
+                    data_series0={CarbonFootprint_series0}
+                    data_series1={carbonFootprintSeries1}
+                    flipcard_description={CarbonFootprintFlipcardDescription}
+                    selectedpiechart={
+                      props.selectedtab === 2 ? "selected" : undefined
+                    }
+                  />
+                )}
+
+                <PieChartDials
+                  chartDivIndex="3"
+                  title="Green Chemistry"
+                  sub_title="Coming Soon"
+                  data_series0={GreenChemistry_series0}
+                  pie_chart_percentage="N/A"
+                  data_series1={GreenChemistry_series1}
+                  flipcard_description={GreenChemistryFlipcardDescription}
+                  selectedpiechart={
+                    props.selectedtab === 3 ? "selected" : undefined
+                  }
+                />
+                <PieChartDials
+                  chartDivIndex="4"
+                  title="Sustainable Packaging"
+                  sub_title="Coming Soon"
+                  data_series0={SustainablePackaging_series0}
+                  pie_chart_percentage="N/A"
+                  data_series1={SustainablePackaging_series1}
+                  flipcard_description={SustainablePackagingFlipcardDescription}
+                  selectedpiechart={
+                    props.selectedtab === 4 ? "selected" : undefined
+                  }
+                />
+              </div>
+            </div>
+            {!assessmentsData.isPackagingDataCompleted && (
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "flex-end",
+                  alignItems: "center",
+                  gap: "12px",
+                }}
+              >
+                <img src={dataInCompleteIcon} alt="Data incomplete" />
+                <span style={{ fontFamily: "kenvue-sans", fontSize: "16px" }}>
+                  There are one or more incomplete packaging components that are
+                  not included in the results.
+                </span>
+              </div>
+            )}
+          </>
+        )}
+      </div>
+    </div>
+  );
+
+
+
+ProductAssessment.scss as following
+
+
+.edit-assessment-title {
+    width: auto;
+    height: auto;
+    display: flex;
+    padding: 24px;
+    align-items: center;
+    padding-left: 0px;
+    max-width: 883px;
+    .new-product-name {
+        margin-right: 10px;  // Adjust spacing here
+    }
+}
+
+@media(max-width:1440px) {
+    .edit-assessment-title {
+        max-width: 883px;
+    }
+}
+
+@media(max-width:880px) {
+    .edit-assessment-title {
+        max-width: 758px;
+        
+    }
+}
+
+.pie_chart_main_div {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  
+    .pie_chart_main_div_view_result,
+    .result_back_to_assessment {
+      width: 100%;
+    }
+  
+    .pie_chart_lock_out_div {
+      width: 195px;
+      flex-shrink: 0;
+    }
+  
+    .pie_chart_dials_row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px; // Add gap between dials for better spacing
+  
+      .PieChartDials {
+        width: calc(100% / 5); // default width for five dials in one row
+        flex-shrink: 0;
+      }
+    }
+  
+    // Breakpoint: less than 1440px - 4 items in a row, adjust width
+    @media (max-width: 1440px) {
+      .pie_chart_dials_row .PieChartDials {
+        width: calc(100% / 2);
+      }
+    }
+  
+    // Breakpoint: less than 1151px - 3 items in the first row, 2 in the second
+    @media (max-width: 1151px) {
+      .pie_chart_dials_row .PieChartDials {
+        width: calc(100% / 3);
+      }
+      .pie_chart_dials_row .PieChartDials:nth-child(4) {
+        width: calc(100% / 2); // Ensures row wrap for Sustainable Packaging in new row
+      }
+    }
+  
+    // Breakpoint: less than 880px - 2 items per row
+    @media (max-width: 880px) {
+      .pie_chart_dials_row .PieChartDials {
+        width: calc(100% / 2);
+      }
+    }
+  
+    // Breakpoint: less than 480px - 1 item per row for mobile
+    @media (max-width: 480px) {
+      .pie_chart_dials_row .PieChartDials {
+        width: 100%;
+      }
+    }
+  
+    .dials_without_data_div1,
+    .pie_chart_great_jon_div,
+    .pie_chart_lock_out_div {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      margin-bottom: 16px;
+    }
+  }
+  

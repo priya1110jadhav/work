@@ -1,0 +1,622 @@
+"""
+  return (
+    <div className="table-wrapper">
+      <Grid container>
+        <Grid>
+          <TableContainer component={Paper} className="table-container">
+            <Table stickyHeader>
+              <TableHead  className="table-head">
+                <TableRow>
+                  {/* <TableCell sx={{ width: '2%', paddingLeft: '1px' }}></TableCell>{} */}
+                  <TableCell className="table-cell0" 
+                  sx={{ width:'296px !important'}}                   
+                    sortDirection={orderBy === "tradeName" ? order : false}
+                  >
+                    <TableSortLabel
+                      active={true}
+                      direction={orderBy === "tradeName" ? order : "asc"}
+                      onClick={() => handleRequestSort("tradeName")}
+                      hideSortIcon={false}
+                      // style={{icon :orderBy === 'tradeName' ? {fontWeight:'bold'} : {opacity:0.5},}}
+                    >
+                      <TwoLineTypography variant="body1">
+                        Raw Material Trade Name
+                      </TwoLineTypography>
+                    </TableSortLabel>
+                  </TableCell>
+                  <TableCell className="table-cell1"      
+                  sx={{ width:'155px !important'}}               
+                    sortDirection={orderBy === "rawMaterialId" ? order : false}
+                  >
+                    <TableSortLabel
+                      active={true}
+                      direction={orderBy === "rawMaterialId" ? order : "asc"}
+                      onClick={() => handleRequestSort("rawMaterialId")}
+                      hideSortIcon={false}
+                    >
+                      <TwoLineTypography variant="body1">
+                        Raw Code
+                      </TwoLineTypography>
+                    </TableSortLabel>
+                  </TableCell>
+
+                  <TableCell className="table-cell2"
+                  sx={{ width:'155px !important'}} 
+                    sortDirection={orderBy === "percentage" ? order : false}
+                  >
+                    <TableSortLabel
+                      active={true}
+                      direction={orderBy === "percentage" ? order : "asc"}
+                      onClick={() => handleRequestSort("percentage")}
+                      hideSortIcon={false}
+                    >
+                      <TwoLineTypography variant="body1">
+                        Mass % Composition
+                      </TwoLineTypography>
+                    </TableSortLabel>
+                  </TableCell>
+
+                  <TableCell
+                    sx={{ width: "0.5%" }}
+                    className="divider"
+                  ></TableCell>
+                  <TableCell className="table-cell3"                    
+                    sortDirection={orderBy === "envFootprint" ? order : false}
+                  >
+                    <TableSortLabel
+                      active={true}
+                      direction={orderBy === "envFootprint" ? order : "asc"}
+                      onClick={() => handleRequestSort("envFootprint")}
+                      className="table-sort-label"
+                    >
+                      <div className="cell-content">
+                        <div className="cell-text">
+                          <TwoLineTypography variant="body1">
+                            Product Environmental Footprint
+                          </TwoLineTypography>
+                          <Typography className="typography">
+                            (Points per Functional unit)
+                          </Typography>
+                        </div>
+                        <BootstrapTooltip
+                          className="BootstrapTooltip"
+                          title={
+                            <p className="BootstrapTooltip-p">
+                              {PRODUCT_ENVIRONMENTAL_FOOTPRINT_TOOLTIP}
+                            </p>
+                          }
+                          placement="top"
+                          arrow
+                        >
+                          <InfoIcon className="packaging-InfoIcon" />
+                        </BootstrapTooltip>
+                      </div>
+                    </TableSortLabel>
+                  </TableCell>
+                  <TableCell
+                    className="table-cell4"
+                    sx={{ width:'227px !important'}} 
+                    sortDirection={
+                      orderBy === "carbonFootprint" ? order : false
+                    }
+                  >
+                    <TableSortLabel
+                      active={true}
+                      direction={orderBy === "carbonFootprint" ? order : "asc"}
+                      onClick={() => handleRequestSort("carbonFootprint")}
+                      hideSortIcon={false}
+                      className="table-sort-label"
+                    >
+                      <div className="cell-content">
+                        <div className="cell-text">
+                          <TwoLineTypography variant="body1">
+                            Carbon Footprint
+                          </TwoLineTypography>
+                          <Typography className="typography" >
+                            {" "}
+                            (g CO2 eq. per functional unit){" "}
+                          </Typography>
+                        </div>
+                        <BootstrapTooltip
+                          className="BootstrapTooltip"
+                          title={
+                            <p className="BootstrapTooltip-p">
+                              {CARBON_FOOTPRINT_FOOTPRINT_TOOLTIP}
+                            </p>
+                          }
+                        >
+                          <InfoIcon className="packaging-InfoIcon" />
+                        </BootstrapTooltip>
+                      </div>
+                    </TableSortLabel>
+                  </TableCell>
+
+                  <TableCell className="green-chemistry"  
+                  sx={{ width:'316px !important'}}                  
+                    sortDirection={orderBy === "greenChemistry" ? order : false}
+                  >
+                    <TableSortLabel
+                      active={true}
+                      direction={orderBy === "greenChemistry" ? order : "asc"}
+                      onClick={() => handleRequestSort("greenChemistry")}
+                      hideSortIcon={false} // Ensure the sort icon is shown
+                    >
+                      <div className="cell-content">
+                        <div className="cell-text">
+                          <TwoLineTypography variant="body1">
+                            Green Chemistry
+                          </TwoLineTypography>
+                        </div>
+                        <BootstrapTooltip
+                          className="BootstrapTooltip"
+                          title={
+                            <p className="BootstrapTooltip-p">
+                              {GREEN_CHEMISTRY_FOOTPRINT_TOOLTIP}
+                            </p>
+                          }
+                        >
+                          <InfoIcon className="packaging-InfoIcon" />
+                        </BootstrapTooltip>
+                      </div>
+                    </TableSortLabel>
+                  </TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {stableSort(rows, getComparator(order, orderBy)).map(
+                  (row, index) => {
+                    const error = errors.get(row.rawMaterialId);
+                    const emptyOrUndefined = (value: string | undefined) => {
+                      return value === "" || value === undefined;
+                    };
+                    const fullValue = emptyOrUndefined(row.percentage)
+                      ? 0
+                      : parseFloat(row?.percentage?.toString()).toFixed(6);
+                    return (
+                      <TableRow
+                        key={row.rawMaterialId}
+                        className="table-row">
+                        <TableCell
+                          className="table-cell-row"
+                          sx={{ width:'296px !important'}} 
+                        >
+                          <Box className="table-box">
+                            {isFormulaCompositionEditable && (
+                              <IconButton
+                                className={"icon-button"}
+                                disabled={!isFormulaCompositionEditable}
+                                onClick={() => handleDeleteRow(index)}                               
+                              >
+                                {mode !== "view" && <DeleteIcon />}
+                              </IconButton>
+                            )}
+                            <Tooltip
+                              title={row.tradeName}
+                              PopperProps={{
+                                modifiers: [
+                                  {
+                                    name: "offset",
+                                    options: {
+                                      offset: [0, -30], // Adjust the vertical offset here
+                                    },
+                                  },
+                                ],
+                              }}
+                              componentsProps={{ 
+                                tooltip: {
+                                  sx: {
+                                    color: "#111010",
+                                    mb: "-29px",
+                                    fontSize: "10px",
+                                    fontWeight: "600",
+                                  },
+                                },
+                              }}
+                              placement="top-start"
+                            >
+                              <CustomTextField
+                                variant="outlined"
+                                value={row.tradeName}
+                                inputProps={{ readOnly: true }}
+                                fullWidth
+                                className="disabledfield"
+                                sx={{
+                                  "& .MuiInputBase-input": {
+                                    fontSize: "13.33px",
+                                    height: "20px",
+                                    padding: "0px",
+                                  },
+                                }}
+                              />
+                            </Tooltip>
+                          </Box>
+                        </TableCell>
+                        <TableCell className="table-cell5"  sx={{ width:'155px !important'}} >
+                       
+                          <Box className="table-box1">
+                            <TextField
+                              variant="outlined"
+                              value={row.rawMaterialId}
+                              inputProps={{ readOnly: true }}
+                              fullWidth
+                              className="disabledfield"
+                              InputProps={{
+                                style: {
+                                  paddingLeft: "0px", // Adjust the right padding here
+                                  paddingRight: "0px",
+                                },
+                              }}
+                              sx={{
+                                "& fieldset": {
+                                  border: "none", // Remove the border around the TextField
+                                },
+                                "& .MuiOutlinedInput-root": {
+                                  padding: "0px",
+                                  "&:hover fieldset": {
+                                    border: "none",
+                                    paddingLeft: "0px", // Adjust the right padding here
+                                    paddingRight: "0px",
+
+                                    // Ensure no border on hover
+                                  },
+                                  "&.Mui-focused": {
+                                    "& fieldset": {
+                                      border: "none",
+                                    },
+                                  },
+                                },
+                              }}
+                            />
+                          </Box>
+                        </TableCell>
+
+                        <TableCell className="table-cell2"  sx={{ width:'155px !important'}} >
+                          <CustomTooltip title={error || fullValue}>
+                            <TextField
+                              value={
+                                inFocusRows.includes(index)
+                                  ? row.percentage
+                                  : parseFloat(row.percentage).toFixed(2)
+                              }
+                              onChange={(e) => {
+                                validateEnteredValue(index, e.target.value);
+                              }}
+                              variant="outlined"
+                              fullWidth
+                              type="number"
+                              onBlur={(e) => {
+                                handleRowBlur(
+                                  row.rawMaterialId,
+                                  e.target.value,
+                                  index
+                                );
+                              }}
+                              onFocus={() =>
+                                setInFocusRows((prevRows) => [
+                                  ...prevRows,
+                                  index,
+                                ])
+                              }
+                              InputProps={{
+                                endAdornment: (
+                                  <InputAdornment position="start">
+                                    %
+                                  </InputAdornment>
+                                ),
+                                sx: {
+                                  "& input[type=number]::-webkit-outer-spin-button, & input[type=number]::-webkit-inner-spin-button":
+                                    {
+                                      "-webkit-appearance": "none",
+                                    },
+                                },
+                              }}
+                              inputProps={{
+                                step: "0.000001",
+                                min: 0,
+                                max: 100,
+                                readOnly: !isFormulaCompositionEditable,
+                              }}
+                              sx={{
+                                "& input": {
+                                  paddingY: "10px",
+                                  textAlign: "right",
+                                  cursor: !isFormulaCompositionEditable
+                                    ? "not-allowed"
+                                    : "text",
+                                  fontFamily: "kenvue-sans-regular",
+                                },
+                                "& fieldset": {
+                                  border: error ? "2px solid red" : "none", // Red border if error
+                                },
+                                "& .MuiOutlinedInput-root": {
+                                  "&:hover fieldset": {
+                                    border: error ? "2px solid red" : "none", // Red border on hover if error
+                                  },
+                                  "&.Mui-focused": {
+                                    "& fieldset": {
+                                      border:
+                                        mode !== "view"
+                                          ? getBorderColor(error)
+                                          : "none",
+                                    },
+                                  },
+                                },
+                              }}
+                            />
+                          </CustomTooltip>
+                        </TableCell>
+
+                        <TableCell
+                          sx={{ width: "0.5%" }}
+                          className="divider"
+                        ></TableCell>
+
+                        <TableCell className="table-cell6"  sx={{ width:'269px !important'}} >
+                          <Box display="flex" alignItems="center">
+                            <LinearProgress
+                              sx={{
+                                "--LinearProgress-thickness": "19px",
+                                width: "90%",
+                                background: "#D2D1D2",
+                                [`& .MuiLinearProgress-bar`]: {
+                                  backgroundColor: getColorByValue(
+                                    row.envFootprint ? row.envFootprint : 0
+                                  ),
+                                },
+                              }}
+                              variant="determinate"
+                              value={row.envFootprint ? row.envFootprint : 0}
+                              className="linear-progress-bar"
+                            />
+                            <Typography
+                              variant="body2"
+                              className="progress-value"
+                            >{`${
+                              row.envFootprint ? row.envFootprint.toFixed(6) : 0
+                            }`}</Typography>
+                          </Box>
+                        </TableCell>
+                        <TableCell className="table-cell7">
+                          <Box display="flex" alignItems="center">
+                            <LinearProgress
+                              sx={{
+                                "--LinearProgress-thickness": "19px",
+                                width: "90%",
+                                background: "#D2D1D2",
+                                [`& .MuiLinearProgress-bar`]: {
+                                  backgroundColor: getColorByValue(
+                                    row.carbonFootprint
+                                      ? row.carbonFootprint
+                                      : 0
+                                  ),
+                                },
+                              }}
+                              variant="determinate"
+                              value={
+                                row.carbonFootprint ? row.carbonFootprint : 0
+                              }
+                              className="linear-progress-bar"
+                            />
+                            <Typography
+                              variant="body2"
+                              className="progress-value"
+                            >{`${
+                              row.carbonFootprint
+                                ? row.carbonFootprint.toFixed(6)
+                                : 0
+                            }`}</Typography>
+                          </Box>
+                        </TableCell>
+                        <TableCell className="table-cell8"  sx={{ width:'316px !important'}} >
+                          <Box display="flex" alignItems="center">
+                            <LinearProgress
+                              sx={{
+                                "--LinearProgress-thickness": "19px",
+                                width: "90%",
+                                background: "#D2D1D2",
+                                [`& .MuiLinearProgress-bar`]: {
+                                  backgroundColor: getColorByValue(
+                                    row.greenChemistry ? row.greenChemistry : 0
+                                  ),
+                                },
+                              }}
+                              variant="determinate"
+                              value={
+                                row.greenChemistry ? row.greenChemistry : 0
+                              }
+                              className="linear-progress-bar"
+                            />
+                            <Typography
+                              variant="body2"
+                              className="progress-value"
+                            >
+                              {`${row.greenChemistry ? row.greenChemistry : 0}`}
+                            </Typography>
+                          </Box>
+                        </TableCell>
+                      </TableRow>
+                    );
+                  }
+                )}
+              </TableBody>
+            </Table>
+          </TableContainer>
+          
+        </Grid>
+      </Grid>
+      <Grid container>
+        <Grid item xs={3.6}>
+          {isFormulaCompositionEditable && (
+            <TextField
+              value={searchValue}
+              onChange={handleSearchChange}
+              className="disabledfield"
+              placeholder="Search Raw material or code here..."
+              InputProps={{
+                disableUnderline: true,
+                endAdornment: (
+                  <>
+                    {isLoading ? (
+                      <CircularProgress color="inherit" size={20} />
+                    ) : null}
+                  </>
+                ),
+              }}
+              sx={{
+                width: "100%",
+                maxWidth: "400px",
+                marginBottom: "10px",
+                marginTop: "5px",
+                "& input": {
+                  padding: "8px 14px",
+                },
+                "& fieldset": {
+                  border: "none", // Remove the border around the TextField
+                },
+                "& .MuiOutlinedInput-root": {
+                  "&:hover fieldset": {
+                    border: "none", // Ensure no border on hover
+                  },
+                  "&.Mui-focused": {
+                    "& fieldset": {
+                      border: "2px solid #00B097",
+                    },
+                  },
+                },
+              }}
+            />
+          )}
+          <Table>
+            <div
+              ref={listRef}
+              style={{
+                height: searchResults.length > 0 ? "250px" : "0px",
+                overflowY: "auto",
+              }}
+            >
+              <TableBody>
+                {mode !== "view" &&
+                  searchResults?.map((result, index) => (
+                    <TableRow
+                      key={`${index}+${result.tradeName}`}
+                      hover
+                      onClick={() => handleSearchSelect(result)}
+                    >
+                      <TableCell>{result.tradeName}</TableCell>
+                      <TableCell>{result.rawMaterialId}</TableCell>
+                    </TableRow>
+                  ))}
+              </TableBody>
+            </div>
+          </Table>
+        </Grid>
+        <Grid item xs={0.6}></Grid>
+        <Grid item xs={2}>
+          <TableCell
+            sx={{
+              width: "10%",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              paddingTop: "12px",
+              border: "none",
+            }}
+          >
+            <div
+              style={{ display: "flex", alignItems: "center", border: "none" }}
+            >
+              <Typography
+                variant="h6"
+                sx={{
+                  marginRight: "5px",
+                  fontFamily: "kenvue-sans-regular",
+                  fontSize: "14px",
+                  fontWeight: "400",
+                  lineHeight: "21px",
+                  textAlign: "left",
+                }}
+              >
+                Total:
+              </Typography>
+              <Typography
+                sx={{
+                  fontFamily: "kenvue-sans-regular",
+                  fontSize: "14px",
+                  fontWeight: "700",
+                  lineHeight: "21px",
+                  textAlign: "left",
+                  border: "none",
+                }}
+                onMouseEnter={handleMouseEnterWeight}
+                onMouseLeave={handleMouseLeaveWeight}
+              >
+                {formattedTotalWeight}%
+              </Typography>
+
+              {
+                 parseFloat(getTotalWeight().toFixed(6)) ===
+                100 ? (
+                  <CheckCircleOutlineIcon
+                    sx={{ color: "green", fontSize: 20, marginLeft: "10px" }}
+                  />
+                ) : (
+                  <HighlightOffIcon
+                    sx={{ color: "red", fontSize: 20, marginLeft: "10px" }}
+                  />
+                )
+              }
+            </div>
+          </TableCell>
+        </Grid>
+        <Grid item xs={5.4}>
+          <TableCell
+            sx={{
+              width: "30%",
+              whiteSpace: "normal",
+              paddingLeft: "115px",
+              border: "none",
+            }}
+          >
+            <Box display="flex" alignItems="right">
+              <Typography variant="body2">{`${formattedTotalWeight_envFootprint}`}</Typography>
+            </Box>
+          </TableCell>
+          <TableCell
+            sx={{
+              width: "40%",
+              whiteSpace: "normal",
+              paddingLeft: "150px",
+              border: "none",
+            }}
+          >
+            <Box display="flex" alignItems="right">
+              <Typography variant="body2">{`${formattedTotalWeight_carbonFootprint}`}</Typography>
+            </Box>
+          </TableCell>
+          <TableCell
+            sx={{
+              width: "30%",
+              whiteSpace: "normal",
+              paddingLeft: "150px",
+              border: "none",
+            }}
+          >
+            <Box display="flex" alignItems="right">
+              <Typography variant="body2">{`${formattedTotalWeight_greenChemistry}`}</Typography>
+            </Box>
+          </TableCell>
+        </Grid>
+      </Grid>
+    </div>
+  );"""
+here there is two div under "table-wrapper"
+1 is table and 2nd is another div which contain search box then total for mass composition then total for Product Environmental Footprint (Points per functional unit) then total for Carbon Footprint
+(g CO2 eq. per functional unit) and total for Green Chemistry. but we are showing it in separate div instead of table mui footer . 
+now i need to do modification like i want to add sticky footer to my table under table-container . 
+1)in first two header i.e 'table-cell0 and table-cell1' combined search bar is their in footer
+2)for mass composition row the total of mass composition is displayed at the bottom of table-cell2. 
+3)for Product Environmental Footprint (Points per functional unit) row the total of Product Environmental Footprint (Points per functional unit) is displayed at the bottom of table-cell3. 
+4)for Carbon Footprint
+(g CO2 eq. per functional unit) row the total of Carbon Footprint
+(g CO2 eq. per functional unit) is displayed at the bottom of table-cell4. 
+5)for Green Chemistry row the total of  Green Chemistry is displayed at the bottom of green-chemistry  
